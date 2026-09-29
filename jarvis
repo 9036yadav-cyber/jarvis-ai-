@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>J.A.R.V.I.S. - Created by Darshan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cyan: #00f0ff;
+      --gold: #ffb700;
+      --red: #e62429;
+      --dark-bg: #030a16;
+      --panel-bg: rgba(6, 20, 38, 0.85);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--dark-bg);
+      color: var(--cyan);
+      font-family: 'Rajdhani', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background-image: 
+        radial-gradient(circle at 50% 50%, rgba(0, 240, 255, 0.1) 0%, transparent 60%),
+        linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
+      background-size: 100% 100%, 30px 30px, 30px 30px;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 650px;
+      background: var(--panel-bg);
+      border: 2px solid var(--cyan);
+      box-shadow: 0 0 25px rgba(0, 240, 255, 0.3), inset 0 0 15px rgba(0, 240, 255, 0.2);
+      border-radius: 12px;
+      padding: 30px;
+      text-align: center;
+      backdrop-filter: blur(8px);
+    }
+
+    header h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.2rem;
+      letter-spacing: 4px;
+      color: #fff;
+      text-shadow: 0 0 10px var(--cyan), 0 0 20px var(--cyan);
+      margin-bottom: 5px;
+    }
+
+    header p {
+      font-size: 1rem;
+      color: var(--gold);
+      letter-spacing: 2px;
+      margin-bottom: 25px;
+      text-transform: uppercase;
+    }
+
+    /* ARC REACTOR STATES */
+    .arc-reactor {
+      width: 130px;
+      height: 130px;
+      margin: 0 auto 25px auto;
+      border-radius: 50%;
+      border: 3px solid rgba(0, 240, 255, 0.3);
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.4s ease;
+    }
+
+    .arc-core {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: inset 0 0 10px rgba(0, 240, 255, 0.2);
+      transition: all 0.4s ease;
+    }
+
+    /* LISTENING MODE: GOLD GLOW ANIMATION */
+    .arc-reactor.listening {
+      border-color: var(--gold);
+      box-shadow: 0 0 25px var(--gold);
+      animation: listeningPulse 1.2s infinite alternate;
+    }
+
+    .arc-reactor.listening .arc-core {
+      background: #ffffff;
+      box-shadow: 0 0 35px var(--gold), inset 0 0 20px var(--gold);
+    }
+
+    /* SPEAKING / PROCESSING MODE: CYAN GLOW */
+    .arc-reactor.speaking {
+      border-color: var(--cyan);
+      box-shadow: 0 0 30px var(--cyan);
+    }
+
+    .arc-reactor.speaking .arc-core {
+      background: #ffffff;
+      box-shadow: 0 0 40px var(--cyan), inset 0 0 20px var(--cyan);
+    }
+
+    @keyframes listeningPulse {
+      0% { box-shadow: 0 0 15px var(--gold); transform: scale(1); }
+      100% { box-shadow: 0 0 45px var(--gold); transform: scale(1.05); }
+    }
+
+    .status-text {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.95rem;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+      color: #a0d8ef;
+    }
+
+    .dialog-box {
+      background: rgba(0, 10, 25, 0.8);
+      border: 1px solid rgba(0, 240, 255, 0.4);
+      border-radius: 8px;
+      padding: 15px;
+      min-height: 110px;
+      text-align: left;
+      margin-bottom: 20px;
+      font-size: 1.1rem;
+    }
+
+    .dialog-box .user-msg {
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+
+    .dialog-box .ai-msg {
+      color: #ffffff;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    button {
+      background: rgba(0, 240, 255, 0.15);
+      border: 1px solid var(--cyan);
+      color: #fff;
+      font-family: 'Orbitron', sans-serif;
+      padding: 12px 24px;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background: var(--cyan);
+      color: var(--dark-bg);
+      box-shadow: 0 0 15px var(--cyan);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>J.A.R.V.I.S.</h1>
+      <p>CREATED BY DARSHAN • AVENGERS AI PROTOCOL</p>
+    </header>
+
+    <div class="arc-reactor" id="arcReactor" onclick="toggleListening()">
+      <div class="arc-core"></div>
+    </div>
+
+    <div class="status-text" id="statusText">SYSTEM STANDBY - CLICK TO LISTEN</div>
+
+    <div class="dialog-box">
+      <div class="user-msg" id="userQuery"><b>You:</b> Click Arc Reactor to start mic...</div>
+      <div class="ai-msg" id="aiResponse"><b>J.A.R.V.I.S.:</b> Standby mode active, boss.</div>
+    </div>
+
+    <div class="btn-group">
+      <button id="toggleBtn" onclick="toggleListening()">Toggle Microphone</button>
+      <button onclick="showCommands()">Supported Commands</button>
+    </div>
+  </div>
+
+  <script>
+    const qaPairs = {
+      "who created you": "I am J.A.R.V.I.S., an artificial intelligence vocal system created and developed by Darshan.",
+      "who is your creator": "My creator is Darshan, who engineered my voice recognition and Avengers operational protocols.",
+      "who are you": "I am J.A.R.V.I.S., an artificial intelligence system created by Darshan.",
+      "who is iron man": "Iron Man is Tony Stark, a genius billionaire, playboy, and philanthropist in powered armor.",
+      "who is captain america": "Captain America is Steve Rogers, a World War II super-soldier wielding an indestructible vibranium shield.",
+      "who is thor": "Thor Odinson is the Asgardian God of Thunder, former wielder of Mjolnir and Stormbreaker.",
+      "who is the strongest avenger": "According to system records, Thor or Wanda Maximoff hold the highest power levels among the Avengers.",
+      "what are the infinity stones": "The six Infinity Stones are Space, Mind, Reality, Power, Time, and Soul.",
+      "who is thanos": "Thanos is the Mad Titan who sought all six Infinity Stones to erase half of all life in the universe.",
+      "avengers assemble": "Command recognized. Activating all Avengers defensive protocols, boss.",
+      "hello": "Greetings, boss. I am J.A.R.V.I.S., created by Darshan. Say 'Hey Jarvis' followed by your command."
+    };
+
+    const statusText = document.getElementById('statusText');
+    const userQueryEl = document.getElementById('userQuery');
+    const aiResponseEl = document.getElementById('aiResponse');
+    const arcReactor = document.getElementById('arcReactor');
+    const toggleBtn = document.getElementById('toggleBtn');
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let recognition;
+    let isListening = false;
+
+    if (SpeechRecognition) {
+      recognition = new SpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = 'en-US';
+
+      recognition.onstart = () => {
+        isListening = true;
+        setVisualState('listening');
+        statusText.innerText = 'MICROPHONE ACTIVE - SAY "HEY JARVIS"...';
+        toggleBtn.innerText = 'Stop Microphone';
+      };
+
+      recognition.onerror = (event) => {
+        console.log("Speech recognition error:", event.error);
+        if (isListening) {
+          stopListening();
+          statusText.innerText = 'ERROR: ' + event.error.toUpperCase() + '. CLICK TO RETRY.';
+        }
+      };
+
+      recognition.onend = () => {
+        if (!isListening) {
+          setVisualState('idle');
+          statusText.innerText = 'SYSTEM STANDBY - CLICK TO LISTEN';
+          toggleBtn.innerText = 'Toggle Microphone';
+        }
+      };
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript.toLowerCase().trim();
+        userQueryEl.innerHTML = `<b>You:</b> ${transcript}`;
+
+        isListening = false;
+        recognition.stop();
+
+        if (transcript.includes("jarvis")) {
+          let cleanQuery = transcript
+            .replace("hey jarvis", "")
+            .replace("hi jarvis", "")
+            .replace("jarvis", "")
+            .trim();
+
+          if (cleanQuery.length > 0) {
+            processQuery(cleanQuery);
+          } else {
+            const reply = "Yes boss? How can I assist you today?";
+            aiResponseEl.innerHTML = `<b>J.A.R.V.I.S.:</b> ${reply}`;
+            speakResponse(reply);
+          }
+        } else {
+          processQuery(transcript);
+        }
+      };
+    } else {
+      statusText.innerText = "MUST USE GOOGLE CHROME OR MS EDGE ON DESKTOP.";
+    }
+
+    function toggleListening() {
+      if (!recognition) return;
+
+      if (isListening) {
+        stopListening();
+      } else {
+        startListening();
+      }
+    }
+
+    function startListening() {
+      try {
+        isListening = true;
+        recognition.start();
+      } catch (e) {
+        console.log("Already started");
+      }
+    }
+
+    function stopListening() {
+      isListening = false;
+      if (recognition) {
+        recognition.stop();
+      }
+      setVisualState('idle');
+      statusText.innerText = 'SYSTEM STANDBY - CLICK TO LISTEN';
+      toggleBtn.innerText = 'Toggle Microphone';
+    }
+
+    function setVisualState(state) {
+      arcReactor.classList.remove('listening', 'speaking');
+
+      if (state === 'listening') {
+        arcReactor.classList.add('listening');
+      } else if (state === 'speaking') {
+        arcReactor.classList.add('speaking');
+      }
+    }
+
+    function processQuery(query) {
+      let responseText = "";
+
+      if (query.includes("time")) {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        responseText = `The current time is ${timeString}, boss.`;
+      } 
+      else if (query.includes("date") || query.includes("day")) {
+        const now = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const dateString = now.toLocaleDateString('en-US', options);
+        responseText = `Today is ${dateString}.`;
+      }
+      else {
+        let matchedKey = Object.keys(qaPairs).find(key => query.includes(key));
+        if (matchedKey) {
+          responseText = qaPairs[matchedKey];
+        } else {
+          responseText = "I couldn't find that in the database, boss. Try asking 'Who created you', 'What is the time', or 'Who is Iron Man'.";
+        }
+      }
+
+      aiResponseEl.innerHTML = `<b>J.A.R.V.I.S.:</b> ${responseText}`;
+      speakResponse(responseText);
+    }
+
+    function speakResponse(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 1.0;
+        utterance.pitch = 0.9;
+
+        utterance.onstart = () => {
+          setVisualState('speaking');
+          statusText.innerText = 'JARVIS IS RESPONDING...';
+        };
+
+        utterance.onend = () => {
+          startListening();
+        };
+
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+
+    function showCommands() {
+      const commands = [
+        "Hey Jarvis, who created you?",
+        "Hey Jarvis, what's the time?",
+        "Hey Jarvis, what's the date?",
+        "Hey Jarvis, who is Iron Man?",
+        "Hey Jarvis, who is Captain America?",
+        "Hey Jarvis, who is Thor?",
+        "Hey Jarvis, who is Thanos?"
+      ];
+      alert("Supported Commands:\n\n" + commands.join("\n"));
+    }
+  </script>
+</body>
+</html>
